@@ -450,6 +450,8 @@
 	. = parent_tags
 	.[weight_class_to_text(w_class)] = weight_class_to_tooltip(w_class)
 
+	if(tool_behaviour)
+		.["functional"] = "It has a tool behaviour of [tool_behaviour_name(tool_behaviour)] with a speed multiplier of [toolspeed]"
 	if(item_flags & CRUEL_IMPLEMENT)
 		.[span_red("morbid")] = "It seems quite practical for particularly morbid procedures and experiments."
 
