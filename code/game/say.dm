@@ -329,8 +329,8 @@ GLOBAL_LIST_INIT(emphasis_types, list(
 
 /proc/get_radio_span(freq)
 	var/returntext = GLOB.freqtospan["[freq]"]
-	if(returntext)
-		return returntext
+	if(returntext && (returntext != "radio"))
+		return "radio [returntext]"
 	return "radio"
 
 /proc/get_radio_name(freq, freq_name)
