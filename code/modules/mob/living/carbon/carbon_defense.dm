@@ -33,7 +33,7 @@
 	if(obscured_slots & HIDEEYES)
 		return FALSE
 
-	if(requires_eyes && !get_organ_by_type(/obj/item/organ/eyes))
+	if(requires_eyes && !get_organ_slot(ORGAN_SLOT_EYES))
 		return FALSE
 
 	if(!isnull(max_tint) || !isnull(max_flash_protection))
