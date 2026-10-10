@@ -196,6 +196,9 @@ Do not add any of the following in a Pull Request or risk getting the PR closed:
 
 Just because something isn't on this list doesn't mean that it's acceptable. Use common sense above all else.
 
+## AI/LLMs
+This project does not accept any AI-generated code. All use of AI in the process of contributing to the project should be disclosed.
+
 ## A word on Git
 
 This repository uses `LF` line endings for all code as specified in the **.gitattributes** and **.editorconfig** files.
