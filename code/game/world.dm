@@ -8,6 +8,8 @@
 
 GLOBAL_VAR(restart_counter)
 
+// I weap.
+
 /**
  * WORLD INITIALIZATION
  * THIS IS THE INIT ORDER:
