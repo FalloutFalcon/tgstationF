@@ -27,6 +27,7 @@
 	RegisterSignal(new_pawn, COMSIG_ATOM_WAS_ATTACKED, PROC_REF(on_attacked))
 	RegisterSignal(new_pawn, COMSIG_LIVING_GET_PULLED, PROC_REF(on_get_pulled))
 	RegisterSignal(new_pawn, COMSIG_ATOM_ATTACK_HAND, PROC_REF(on_get_punched))
+	RegisterSignal(new_pawn, COMSIG_ATOM_EXAMINE, PROC_REF(on_examine))
 	return ..() //Run parent at end
 
 /datum/ai_controller/robot_customer/UnpossessPawn(destroy)
@@ -36,7 +37,7 @@
 #endif
 		return
 
-	UnregisterSignal(pawn, list(COMSIG_ATOM_ATTACKBY, COMSIG_ATOM_WAS_ATTACKED, COMSIG_LIVING_GET_PULLED, COMSIG_ATOM_ATTACK_HAND))
+	UnregisterSignal(pawn, list(COMSIG_ATOM_ATTACKBY, COMSIG_ATOM_WAS_ATTACKED, COMSIG_LIVING_GET_PULLED, COMSIG_ATOM_ATTACK_HAND, COMSIG_ATOM_EXAMINE))
 	return ..() //Run parent at end
 
 /datum/ai_controller/robot_customer/proc/on_attackby(datum/source, obj/item/I, mob/living/user)
@@ -75,7 +76,7 @@
 	INVOKE_ASYNC(src, PROC_REF(async_on_get_pulled), source, puller)
 
 /datum/ai_controller/robot_customer/proc/async_on_get_pulled(datum/source, mob/living/puller)
-	var/mob/living/basic/robot_customer/customer = pawn
+	var/datum/ai_controller/robot_customer/customer = pawn
 	var/datum/customer_data/customer_data = blackboard[BB_CUSTOMER_CUSTOMERINFO]
 	var/datum/venue/attending_venue = blackboard[BB_CUSTOMER_ATTENDING_VENUE]
 
@@ -89,12 +90,12 @@
 
 
 /datum/ai_controller/robot_customer/proc/dont_want_that(mob/living/chef, obj/item/thing)
-	var/mob/living/basic/robot_customer/customer = pawn
+	var/datum/ai_controller/robot_customer/customer = pawn
 	var/datum/customer_data/customer_data = blackboard[BB_CUSTOMER_CUSTOMERINFO]
 	customer.say(customer_data.wrong_item_line)
 
 /datum/ai_controller/robot_customer/proc/warn_greytider(mob/living/greytider)
-	var/mob/living/basic/robot_customer/customer = pawn
+	var/datum/ai_controller/robot_customer/customer = pawn
 	var/datum/venue/attending_venue = blackboard[BB_CUSTOMER_ATTENDING_VENUE]
 	var/datum/customer_data/customer_data = blackboard[BB_CUSTOMER_CUSTOMERINFO]
 	//Living mobs are tagged, so these will always be valid
@@ -125,3 +126,21 @@
 
 	if(living_hitter.combat_mode)
 		INVOKE_ASYNC(src, PROC_REF(warn_greytider), living_hitter)
+
+/datum/ai_controller/robot_customer/proc/on_examine(datum/source, mob/user, list/examine_list)
+	SIGNAL_HANDLER
+
+	if(isnull(blackboard[BB_CUSTOMER_CURRENT_ORDER]))
+		return
+
+	var/datum/venue/attending_venue = blackboard[BB_CUSTOMER_ATTENDING_VENUE]
+	var/wanted_item = blackboard[BB_CUSTOMER_CURRENT_ORDER]
+	var/order = "nothing"
+
+	if(istype(wanted_item, /datum/custom_order))
+		var/datum/custom_order/custom_order = wanted_item
+		order = custom_order.get_order_line(attending_venue)
+	else
+		order = attending_venue.order_food_line(wanted_item)
+
+	examine_list += span_notice("Their order was: \"[order].\"")

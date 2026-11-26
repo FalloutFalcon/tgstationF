@@ -4,8 +4,6 @@
 #define MONKEY_FLEE_HEALTH 40
 /// how close an enemy must be to trigger aggression
 #define MONKEY_ENEMY_VISION 9
-/// how close an enemy must be before it triggers flee
-#define MONKEY_FLEE_VISION 4
 /// How long does it take the item to be taken from a mobs hand
 #define MONKEY_ITEM_SNATCH_DELAY 25
 /// Probability monkey will aggro when cuffed

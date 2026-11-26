@@ -182,6 +182,7 @@
 /datum/bt_node/ai_behavior/monkey_set_combat_target
 	var/attack_target_key
 	var/enemies_key
+	var/range = MONKEY_ENEMY_VISION
 
 /datum/bt_node/ai_behavior/monkey_set_combat_target/perform(seconds_per_tick, datum/ai_controller/controller)
 	var/mob/living/living_pawn = controller.pawn
@@ -192,9 +193,7 @@
 		return AI_BEHAVIOR_INSTANT | AI_BEHAVIOR_FAILED
 
 	var/list/valids = list()
-	for(var/mob/living/possible_enemy in view(MONKEY_ENEMY_VISION, living_pawn))
-		if(possible_enemy == living_pawn)
-			continue
+	for(var/mob/living/possible_enemy in oview(range, living_pawn))
 		if(!enemies[possible_enemy])
 			if(!controller.blackboard[BB_MONKEY_AGGRESSIVE])
 				continue
@@ -333,12 +332,13 @@
 /// Rallies nearby monkeys against the current attack target
 /datum/bt_node/ai_behavior/recruit_monkeys
 	var/target_key
+	var/range = MONKEY_ENEMY_VISION
 
 /datum/bt_node/ai_behavior/recruit_monkeys/perform(seconds_per_tick, datum/ai_controller/controller)
 	var/mob/living/living_pawn = controller.pawn
 	var/mob/living/attack_target = controller.blackboard[target_key]
 
-	for(var/mob/living/nearby_monkey in view(living_pawn, MONKEY_ENEMY_VISION))
+	for(var/mob/living/nearby_monkey in oview(range, living_pawn))
 		if(QDELETED(nearby_monkey) || !HAS_AI_CONTROLLER_TYPE(nearby_monkey, /datum/ai_controller/monkey))
 			continue
 		if(prob(MONKEY_RECRUIT_PROB))

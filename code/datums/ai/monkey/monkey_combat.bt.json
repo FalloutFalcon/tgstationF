@@ -40,7 +40,7 @@
 						"decorator": "/datum/bt_node/decorator/pawn_health_below",
 						"vars": {
 							"observer_abort": "BT_ABORT_BOTH",
-							"health_threshold": 40
+							"health_threshold": "MONKEY_FLEE_HEALTH"
 						},
 						"child": {
 							"type": "subtree",
@@ -83,7 +83,7 @@
 												"target_key": "BB_CURRENT_TARGET",
 												"required_dist": 1,
 												"finish_on_arrival": true,
-											"movement_type": "/datum/ai_movement/navmap_astar/monkey"
+												"movement_type": "/datum/ai_movement/navmap_astar/monkey"
 											}
 										},
 										{
@@ -100,7 +100,7 @@
 												"target_key": "BB_monkey_target_disposal",
 												"required_dist": 1,
 												"finish_on_arrival": true,
-											"movement_type": "/datum/ai_movement/navmap_astar/monkey"
+												"movement_type": "/datum/ai_movement/navmap_astar/monkey"
 											}
 										},
 										{
